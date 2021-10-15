@@ -60,7 +60,7 @@ namespace ERPLibrary
         public bool InsertProdotto
             (string nome, string descrizione, double prezzo, float iva)
         {
-            if (SearchProdottoByNome(nome) == null)
+            if (SearchProdottoByNome(nome) != null)
                 return false;
             MemoriaCentrale.Prodotti.Add
                 (
@@ -88,6 +88,7 @@ namespace ERPLibrary
         {
             var cliente = MemoriaCentrale.Clienti.Where(x => x.Id == idCliente).SingleOrDefault();
             var utente = MemoriaCentrale.Utenti.Where(c => c.Id == idUtente).SingleOrDefault();
+
             var prodottiPerDettaglio = MemoriaCentrale.Prodotti.
                 Where(p => prodotti.Contains(p.Id)).ToList();
 
@@ -96,11 +97,11 @@ namespace ERPLibrary
 
             var det = prodottiPerDettaglio.Select(
                 x =>
-                new Dettaglio
-                {
-                    Dettagli = x,
-                    Quantità = 1
-                }
+                    new Dettaglio
+                    {
+                        Dettagli = x,
+                        Quantità = 1
+                    }
                 );
 
 
@@ -111,7 +112,8 @@ namespace ERPLibrary
                 Cliente = cliente,
                 Data = DateTime.Now,
                 NumeroFattura = MemoriaCentrale.GetNextNumeroFattura(),
-                Totale = det.Select(x => x.Dettagli).Sum(x => x.PrezzoProdotto * x.Iva),
+                Totale = det.Select(x =>
+                (x.Quantità * x.Dettagli.PrezzoProdotto * x.Dettagli.Iva)).Sum(x => x),
                 Utente = utente
             };
 

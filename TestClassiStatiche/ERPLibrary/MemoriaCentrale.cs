@@ -53,7 +53,7 @@ namespace ERPLibrary
                 .Max(
                 c => c.Intestazione.NumeroFattura.Split("-")[0]
                 );
-            return $"{partenumerica}-{DateTime.Now}";
+            return $"{partenumerica+1}-{DateTime.Now}";
         }
     }
 }
