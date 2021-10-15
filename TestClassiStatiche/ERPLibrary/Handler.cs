@@ -90,7 +90,9 @@ namespace ERPLibrary
             var utente = MemoriaCentrale.Utenti.Where(c => c.Id == idUtente).SingleOrDefault();
 
             var prodottiPerDettaglio = MemoriaCentrale.Prodotti.
-                Where(p => prodotti.Contains(p.Id)).ToList();
+                Where(
+                p => prodotti.Contains(p.Id)
+                ).ToList();
 
             if (cliente == null || utente == null || !prodottiPerDettaglio.Any())
                 return false;
